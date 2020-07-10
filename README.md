@@ -36,6 +36,38 @@ module.exports = makeExecutableSchema({
 })
 
 ```
+When you add TypeDefsDirective to the schema, you declare directives.
+This is how directives and their arguments are declared:
+
+```GraphQL
+directive @hasOne(
+  # By default, the model will be calculated from the name
+  # of the returned "type" with the prefix 'App/Model/'
+  model: String,
+  # By default ownerColomn = 'id'
+  ownerColomn: String,
+  # By default localColomn = 'id'
+  localColomn:String) on FIELD_DEFINITION
+
+directive @hasMany(
+  # By default, the model will be calculated from the name
+  # of the returned "type" with the prefix 'App/Model/'
+  model: String,
+  # By default ownerColomn = 'id'
+  ownerColomn: String,
+  # By default localColomn = 'id'
+  localColomn:String) on FIELD_DEFINITION
+
+directive @belongsTo(
+  # By default, the model will be calculated from the name
+  # of the returned "type" with the prefix 'App/Model/'
+  model: String,
+  # By default ownerColomn = 'id'
+  ownerColomn: String,
+  # By default localColomn = 'id'
+  localColomn:String) on FIELD_DEFINITION
+  
+```
 
 As you can see, this is done very simply!
 
@@ -64,6 +96,30 @@ makeExecutableSchema({
   schemaDirectives: { belongsTo, /* ... */} 
 })
 ```
+---
+Usage in schema:
+```GraphQL
+type User {
+  id: ID!
+  name: String
+  posts: [Post] @hasMany(ownerColomn: "user_id")
+  token: Token @hasOne(ownerColomn: "user_id")
+}
+
+type Post {
+  id: ID!
+  user_id: Int
+  user: User @belongsTo(localColomn: "user_id")
+}
+
+type Token {
+  user_id: Int!
+  token: String!
+  user: User @belongsTo(localColomn: "user_id")
+}
+
+```
+
 
 # Further development
 
