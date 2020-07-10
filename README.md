@@ -1,4 +1,4 @@
-# Apollo-server-adonis-relatonship
+# Apollo-server-adonis-directives-pack
 
 This package complements apollo-server-adonis with communication directives, namely HasOne, HasMany, BelongsTo.
 
@@ -6,7 +6,7 @@ This package complements apollo-server-adonis with communication directives, nam
 
 # Install
 
-npm i apollo-server-adonis-relationships
+npm i apollo-server-adonis-directives-pack
 
 # Usage
 
@@ -27,7 +27,7 @@ const typeDefs = fs.readFileSync(__dirname + '/types.graphql', { encoding: 'utf8
 const resolvers = require('./resolvers.js')
 const { find, all } = require('./directives')
 
-const { TypeDefsDirective, SchemaDirective } = require('apollo-server-adonis-relationships')
+const { TypeDefsDirective, SchemaDirective } = require('apollo-server-adonis-directives-pack')
 
 module.exports = makeExecutableSchema({ 
   typeDefs: [typeDefs, ...TypeDefsDirective],
@@ -57,7 +57,7 @@ Use of separate directives:
 const { 
   TypeDefsDirective,
   SchemaDirective: { belongsTo } 
-} = require('apollo-server-adonis-relationships')
+} = require('apollo-server-adonis-directives-pack')
 
 makeExecutableSchema({ 
   /* ... */ 
