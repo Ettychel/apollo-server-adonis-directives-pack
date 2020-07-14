@@ -1,4 +1,12 @@
-# README
+# Introduction
+
+Use this package with directives to quickly and easily describe your circuit. 
+
+There are currently directives in the package to make CRUD based on them.
+
+There are also directives for building simple relationships such as HasOne, HasMany, BelongsTo.
+
+The package will continue to develop, but it depends on the needs of the author. The author will always be happy with your issue or PR.
 
 ## Installation
 
@@ -27,8 +35,6 @@ module.exports = makeExecutableSchema({
 ## Apollo-server-adonis-directives-pack
 
 This package complements apollo-server-adonis with communication directives, namely HasOne, HasMany, BelongsTo.
-
-## Install
 
 npm i apollo-server-adonis-directives-pack
 
