@@ -1,48 +1,26 @@
-# README
-
-## Installation
-
-Install from npm
-
-```
-npm i apollo-server-adonis-directives-pack
-```
-
-Import to your app
-
-```javascript
-const { makeExecutableSchema } = require('graphql-tools')
-const { 
-    TypeDefsDirective,
-    SchemaDirective 
-} = require('apollo-server-adonis-directives-pack')
-
-module.exports = makeExecutableSchema({
-    TypeDefs: TypeGefsDirective,
-    schemaDirectives: SchemaDirective,
-    /* ... */
-})
-```
-
-## Apollo-server-adonis-directives-pack
+# Apollo-server-adonis-directives-pack
 
 This package complements apollo-server-adonis with communication directives, namely HasOne, HasMany, BelongsTo.
 
-## Install
+---
+
+# Install
 
 npm i apollo-server-adonis-directives-pack
 
-## Usage
+# Usage
+
 
 The package provides an object with directive classes and an array with GraphQL schemes:
 
 SchemaDirective - object with directive classes  
 TypeDefsDirective -array with GraphQL schemes
 
+--- 
+
 Complete your schema configuration with these objects.  
 This is an example of how I do it in my projects:
-
-```javascript
+```JavaScript
 const { makeExecutableSchema } = require('graphql-tools')
 const fs = require('fs')
 const typeDefs = fs.readFileSync(__dirname + '/types.graphql', { encoding: 'utf8' })
@@ -56,11 +34,12 @@ module.exports = makeExecutableSchema({
   resolvers, 
   schemaDirectives: { ...SchemaDirective, find, all } 
 })
+
 ```
+When you add TypeDefsDirective to the schema, you declare directives.
+This is how directives and their arguments are declared:
 
-When you add TypeDefsDirective to the schema, you declare directives. This is how directives and their arguments are declared:
-
-```graphql
+```GraphQL
 directive @hasOne(
   # By default, the model will be calculated from the name
   # of the returned "type" with the prefix 'App/Model/'
@@ -87,25 +66,25 @@ directive @belongsTo(
   ownerColomn: String,
   # By default localColomn = 'id'
   localColomn:String) on FIELD_DEFINITION
+  
 ```
 
 As you can see, this is done very simply!
 
+---
+
 You can also destructure SchemaDirective and include directives separately.
 
-Its contents:
-
-```javascript
+Its contents: 
+```JavaScript
 SchemaDirective: {
   hasMany: HasManyDirective,
   hasOne: HasOneDirective,
   belongsTo: BelongsToDirective,
 }
 ```
-
 Use of separate directives:
-
-```javascript
+```JavaScript
 /* ... */
 const { 
   TypeDefsDirective,
@@ -117,10 +96,9 @@ makeExecutableSchema({
   schemaDirectives: { belongsTo, /* ... */} 
 })
 ```
-
+---
 Usage in schema:
-
-```graphql
+```GraphQL
 type User {
   id: ID!
   name: String
@@ -139,13 +117,13 @@ type Token {
   token: String!
   user: User @belongsTo(localColomn: "user_id")
 }
+
 ```
 
-## Further development
+
+# Further development
 
 add directive:
-
-* Query
-  * all
-  * find
-
+  - Query
+    - all
+    - find
