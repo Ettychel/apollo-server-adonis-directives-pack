@@ -1,6 +1,6 @@
 {
   "name": "apollo-server-adonis-directives-pack",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "This package complements apollo-server-adonis with a set of directives",
   "main": "index.js",
   "scripts": {
