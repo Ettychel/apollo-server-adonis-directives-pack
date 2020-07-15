@@ -9,12 +9,10 @@ const {
 
 class FindDirective extends SchemaDirectiveVisitor {
 
-  static _argumentArr = [
-    'id'
-  ]
-
   visitFieldDefinition(field) {
     const Model = this.getModel(this)
+    this._argumentArr = ['id']
+
     this._checkArguments(field)
 
     field.resolve = async function (_, { id }) {

@@ -4,12 +4,10 @@ const { getModel, getNameModel, getNameModelInAstNode, _getTypeIgnoreNonNull, _c
 
 class CreateDirective extends SchemaDirectiveVisitor {
 
-  static _argumentArr = [
-    'input'
-  ]
-
   visitFieldDefinition(field) {
     const Model = this.getModel(this)
+    this._argumentArr = ['input']
+    
     this._checkArguments(field)
 
     field.resolve = async function (item, { input }) {

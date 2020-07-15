@@ -11,6 +11,8 @@ class CreateManyDirective extends SchemaDirectiveVisitor {
 
   visitFieldDefinition(field) {
     const Model = this.getModel(this)
+    this._argumentArr = ['input']
+
     this._checkArguments()
 
     field.resolve = async function (item, { input }) {

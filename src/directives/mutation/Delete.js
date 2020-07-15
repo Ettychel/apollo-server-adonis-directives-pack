@@ -11,10 +11,9 @@ const {
 
 class DeleteDirective extends SchemaDirectiveVisitor {
 
-  static _argumentArr = ['id']
-
   visitFieldDefinition(field) {
     const Model = this.getModel(this)
+    this._argumentArr = ['id']
     const isOnceDelete = this._checkArguments(field)
 
     field.resolve = async function (item, { id }) {

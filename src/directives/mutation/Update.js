@@ -10,13 +10,10 @@ const {
 
 class UpdateDirective extends SchemaDirectiveVisitor {
 
-  static _argumentArr = [
-    'id',
-    'input'
-  ]
-
   visitFieldDefinition(field) {
     const Model = this.getModel(this)
+    this._argumentArr = ['id', 'input']
+    
     const isOnceUpdate = this._checkArguments(field)
 
     if (isOnceUpdate) {
