@@ -13,7 +13,11 @@ class HasOneDirective extends SchemaDirectiveVisitor {
   }
 
   _sort(keys, rows, field) {
-    return keys.map(id => rows.find(r => r[field] === id).toJSON())
+    return keys.map(id => {
+      let row = rows.find(r => r[field] === id)
+      if (row) row = row.toJSON()
+      return row
+    })
   }
 }
 

@@ -42,14 +42,13 @@ module.exports = {
   },
 
   getNameModelInAstNode(type) {
-    let name
-    if (type.kind === 'ListType')
-      name = type.type.name.value
+    const prefix = 'App/Models/'
+    if (type.kind === 'NonNullType' || type.kind === 'ListType')
+      return this.getNameModelInAstNode(type.type)
     else if (type.kind === 'NamedType')
-      name = type.name.value
+      return prefix + type.name.value
     else
       throw new Error('Oops!')
-    return 'App/Models/' + name
   },
 
   getModel(parentThis) {
@@ -59,5 +58,19 @@ module.exports = {
     } catch (e) {
       throw new GraphQLError(e)
     }
+  },
+
+  _getTypeIgnoreNonNull(type) {
+    if (type.kind === 'NonNullType')
+      return this._getTypeIgnoreNonNull(type.type)
+    else
+      return type.kind
+  },
+
+  _checkReqArgs(field) {
+    const argsM = field.args.map(e => e.name)
+    const diff = _.difference(this._argumentArr, argsM)
+
+    if (diff.length) throw new Error('One or more of the required arguments not found (' + diff.join(', ') + ')')
   }
 }
