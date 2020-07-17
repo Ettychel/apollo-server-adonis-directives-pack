@@ -1,11 +1,9 @@
-const { SchemaDirectiveVisitor } = require('graphql-tools')
-const { getModel, getNameModel, getNameModelInAstNode, _getTypeIgnoreNonNull, _checkReqArgs } = require('../Traits/Loader')
+const BaseDirective = require('../BaseDirective')
 
-
-class CreateDirective extends SchemaDirectiveVisitor {
+class CreateDirective extends BaseDirective {
 
   visitFieldDefinition(field) {
-    const Model = this.getModel(this)
+    const Model = this._getModel(this)
     this._argumentArr = ['input']
     
     this._checkArguments(field)
@@ -26,8 +24,6 @@ class CreateDirective extends SchemaDirectiveVisitor {
     if (returnType !== 'NamedType') throw new Error('The @create directive returns only one model, not an array')
   }
 }
-
-Object.assign(CreateDirective.prototype, { getModel, getNameModel, getNameModelInAstNode, _getTypeIgnoreNonNull, _checkReqArgs })
 
 const CreateTypeDefs = `directive @create(
   # By default, the model will be calculated from the name

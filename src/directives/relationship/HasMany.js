@@ -1,11 +1,10 @@
-const { SchemaDirectiveVisitor } = require('graphql-tools')
-const Loader = require('../Traits/Loader')
+const BaseDirective = require('../BaseDirective')
 
-class HasManyDirective extends SchemaDirectiveVisitor {
+class HasManyDirective extends BaseDirective {
 
   visitFieldDefinition(field) {
-    const loader = this.getLoader(this)
-    const localColomn = this.getLocalColomn()
+    const loader = this._getLoader(this)
+    const localColomn = this._getLocalColomn()
 
     field.resolve = async function (item) {
       return loader.load(item[localColomn])
@@ -25,7 +24,5 @@ const HasManyTypeDefs = `directive @hasMany(
   ownerColomn: String,
   # By default localColomn = 'id'
   localColomn:String) on FIELD_DEFINITION`
-
-Object.assign(HasManyDirective.prototype, Loader)
 
 module.exports = { HasManyDirective, HasManyTypeDefs }

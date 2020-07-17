@@ -1,17 +1,9 @@
-const { SchemaDirectiveVisitor } = require('graphql-tools')
-const { 
-  getModel, 
-  getNameModel, 
-  getNameModelInAstNode, 
-  _getTypeIgnoreNonNull, 
-  _checkReqArgs 
-} = require('../Traits/Loader')
+const BaseDirective = require('../BaseDirective')
 
-
-class UpdateDirective extends SchemaDirectiveVisitor {
+class UpdateDirective extends BaseDirective {
 
   visitFieldDefinition(field) {
-    const Model = this.getModel(this)
+    const Model = this._getModel(this)
     this._argumentArr = ['id', 'input']
     
     const isOnceUpdate = this._checkArguments(field)
@@ -44,14 +36,6 @@ class UpdateDirective extends SchemaDirectiveVisitor {
     return isOnceId === 'NamedType'
   }
 }
-
-Object.assign(UpdateDirective.prototype, { 
-  getModel, 
-  getNameModel, 
-  getNameModelInAstNode, 
-  _getTypeIgnoreNonNull, 
-  _checkReqArgs 
-})
 
 const UpdateTypeDefs = `directive @update(
   # By default, the model will be calculated from the name

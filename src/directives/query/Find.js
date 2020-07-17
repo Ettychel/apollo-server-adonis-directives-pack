@@ -1,16 +1,9 @@
-const { SchemaDirectiveVisitor } = require('graphql-tools')
-const {
-  getModel,
-  getNameModel,
-  getNameModelInAstNode,
-  _getTypeIgnoreNonNull,
-  _checkReqArgs
-} = require('../Traits/Loader')
+const BaseDirective = require('../BaseDirective')
 
-class FindDirective extends SchemaDirectiveVisitor {
+class FindDirective extends BaseDirective {
 
   visitFieldDefinition(field) {
-    const Model = this.getModel(this)
+    const Model = this._getModel(this)
     this._argumentArr = ['id']
 
     this._checkArguments(field)
@@ -29,14 +22,6 @@ class FindDirective extends SchemaDirectiveVisitor {
   }
 
 }
-
-Object.assign(FindDirective.prototype, {
-  getModel,
-  getNameModel,
-  getNameModelInAstNode,
-  _getTypeIgnoreNonNull,
-  _checkReqArgs
-})
 
 const FindTypeDefs = `directive @find(
   # By default, the model will be calculated from the name

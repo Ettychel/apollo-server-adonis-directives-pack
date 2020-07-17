@@ -1,19 +1,12 @@
-const { SchemaDirectiveVisitor } = require('graphql-tools')
-const {
-  getModel,
-  getNameModel,
-  getNameModelInAstNode,
-  _checkReqArgs
-} = require('../Traits/Loader')
+const BaseDirective = require('../BaseDirective')
 
-
-class CreateManyDirective extends SchemaDirectiveVisitor {
+class CreateManyDirective extends BaseDirective {
 
   visitFieldDefinition(field) {
-    const Model = this.getModel(this)
+    const Model = this._getModel(this)
     this._argumentArr = ['input']
 
-    this._checkArguments()
+    this._checkArguments(field)
 
     field.resolve = async function (item, { input }) {
       const res = await Model.createMany(input)
@@ -31,13 +24,6 @@ class CreateManyDirective extends SchemaDirectiveVisitor {
     if (returnType !== 'ListType') throw new Error('The @create directive only returns an array of models')
   }
 }
-
-Object.assign(CreateManyDirective.prototype, {
-  getModel,
-  getNameModel,
-  getNameModelInAstNode,
-  _checkReqArgs
-})
 
 const CreateManyTypeDefs = `directive @createMany(
   # By default, the model will be calculated from the name

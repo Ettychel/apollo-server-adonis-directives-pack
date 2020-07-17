@@ -1,18 +1,9 @@
-const { SchemaDirectiveVisitor } = require('graphql-tools')
-const _ = require('lodash')
-const {
-  getModel,
-  getNameModel,
-  getNameModelInAstNode,
-  _getTypeIgnoreNonNull,
-  _checkReqArgs
-} = require('../Traits/Loader')
+const BaseDirective = require('../BaseDirective')
 
-
-class DeleteDirective extends SchemaDirectiveVisitor {
+class DeleteDirective extends BaseDirective {
 
   visitFieldDefinition(field) {
-    const Model = this.getModel(this)
+    const Model = this._getModel(this)
     this._argumentArr = ['id']
     const isOnceDelete = this._checkArguments(field)
 
@@ -36,14 +27,6 @@ class DeleteDirective extends SchemaDirectiveVisitor {
     return isOnceId === 'NamedType'
   }
 }
-
-Object.assign(DeleteDirective.prototype, {
-  getModel,
-  getNameModel,
-  getNameModelInAstNode,
-  _getTypeIgnoreNonNull,
-  _checkReqArgs
-})
 
 const DeleteTypeDefs = `directive @delete(
   # By default, the model will be calculated from the name

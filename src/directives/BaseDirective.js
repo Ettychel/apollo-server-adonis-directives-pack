@@ -1,17 +1,18 @@
+const { SchemaDirectiveVisitor } = require('graphql-tools')
 const { GraphQLError } = require('graphql')
 const DataLoader = require('dataloader')
 const _ = use('lodash')
 
+class BaseDirective extends SchemaDirectiveVisitor {
 
-module.exports = {
-  getLoader(parentThis) {
-    let model = this.getModel(parentThis)
-    let colomn = this.getOwnerColomn(parentThis)
-    return this.createLoader(model, colomn)
-  },
+  _getLoader(parentThis) {
+    const model = this._getModel(parentThis)
+    const colomn = this._getOwnerColomn(parentThis)
+    return this._createLoader(model, colomn)
+  }
 
-  createLoader(Model, colomn) {
-    let batchLoadFn = (keys) => {
+  _createLoader(Model, colomn) {
+    const batchLoadFn = (keys) => {
       return Model
         .query()
         .whereIn(colomn, _.uniq(keys))
@@ -19,53 +20,51 @@ module.exports = {
         .then(({ rows }) => this._sort(keys, rows, colomn))
     }
     return new DataLoader(batchLoadFn, { cache: false })
-  },
+  }
 
-  getOwnerColomn() {
+  _getOwnerColomn() {
     const ownerColomn = this.args.ownerColomn
     if (ownerColomn) return ownerColomn
     else return 'id'
-  },
+  }
 
-  getLocalColomn() {
+  _getLocalColomn() {
     if (this.args.localColomn) return this.args.localColomn
     else return 'id'
-  },
+  }
 
-  getNameModel({ args: { model }, visitedType: { astNode: { type } } }) {
+  _getNameModel({ args: { model }, visitedType: { astNode: { type } } }) {
     let name
-    if (model)
-      name = model
-    else
-      name = this.getNameModelInAstNode(type)
+    if (model) name = model
+    else name = this._getNameModelInAstNode(type)
     return name
-  },
+  }
 
-  getNameModelInAstNode(type) {
+  _getNameModelInAstNode(type) {
     const prefix = 'App/Models/'
     if (type.kind === 'NonNullType' || type.kind === 'ListType')
-      return this.getNameModelInAstNode(type.type)
+      return this._getNameModelInAstNode(type.type)
     else if (type.kind === 'NamedType')
       return prefix + type.name.value
     else
       throw new Error('Oops!')
-  },
+  }
 
-  getModel(parentThis) {
-    const model = this.getNameModel(parentThis)
+  _getModel(parentThis) {
+    const model = this._getNameModel(parentThis)
     try {
       return use(model)
     } catch (e) {
       throw new GraphQLError(e)
     }
-  },
+  }
 
   _getTypeIgnoreNonNull(type) {
     if (type.kind === 'NonNullType')
       return this._getTypeIgnoreNonNull(type.type)
     else
       return type.kind
-  },
+  }
 
   _checkReqArgs(field) {
     const argsM = field.args.map(e => e.name)
@@ -74,3 +73,5 @@ module.exports = {
     if (diff.length) throw new Error('One or more of the required arguments not found (' + diff.join(', ') + ')')
   }
 }
+
+module.exports = BaseDirective

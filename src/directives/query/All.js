@@ -1,10 +1,9 @@
-const { SchemaDirectiveVisitor } = require('graphql-tools')
-const { getModel, getNameModel, getNameModelInAstNode } = require('../Traits/Loader')
+const BaseDirective = require('../BaseDirective')
 
-class AllDirective extends SchemaDirectiveVisitor {
+class AllDirective extends BaseDirective {
 
   visitFieldDefinition(field) {
-    const Model = this.getModel(this)
+    const Model = this._getModel(this)
 
     field.resolve = async function () {
       const res = await Model.all()
@@ -15,7 +14,5 @@ class AllDirective extends SchemaDirectiveVisitor {
 
 const AllTypeDefs = `# returns a collection of all models of this specified return type
 directive @all on FIELD_DEFINITION `
-
-Object.assign(AllDirective.prototype, { getModel, getNameModel, getNameModelInAstNode })
 
 module.exports = { AllDirective, AllTypeDefs }

@@ -1,11 +1,10 @@
-const { SchemaDirectiveVisitor } = require('graphql-tools')
-const Loader = require('../Traits/Loader')
+const BaseDirective = require('../BaseDirective')
 
-class BelongsToDirective extends SchemaDirectiveVisitor {
+class BelongsToDirective extends BaseDirective {
 
   visitFieldDefinition(field) {
-    const loader = this.getLoader(this)
-    const localColomn = this.getLocalColomn()
+    const loader = this._getLoader(this)
+    const localColomn = this._getLocalColomn()
 
     field.resolve = async function (item) {
       return loader.load(item[localColomn])
@@ -33,7 +32,5 @@ const BelongsToTypeDefs = `directive @belongsTo(
   ownerColomn: String,
   # By default localColomn = 'id'
   localColomn:String) on FIELD_DEFINITION`
-
-Object.assign(BelongsToDirective.prototype, Loader)
 
 module.exports = { BelongsToDirective, BelongsToTypeDefs }
