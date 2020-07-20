@@ -10,7 +10,8 @@ class CreateManyDirective extends BaseDirective {
 
     field.resolve = async function (item, { input }) {
       const res = await Model.createMany(input)
-      return res.toJSON()
+      res.map(e => e.toJSON())
+      return res
     }
   }
 
