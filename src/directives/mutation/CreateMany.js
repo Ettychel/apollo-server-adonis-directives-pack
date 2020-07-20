@@ -18,10 +18,10 @@ class CreateManyDirective extends BaseDirective {
     this._checkReqArgs(field)
 
     const kind = this._getTypeIgnoreNonNull(field.args.find(e => e.name === 'input').astNode.type)
-    if (kind !== 'ListType') throw new Error('The @create directive only accepts an array of models')
+    if (kind !== 'ListType') throw new Error('The @createMany directive only accepts an array of models')
     
     const returnType = this._getTypeIgnoreNonNull(field.astNode.type)
-    if (returnType !== 'ListType') throw new Error('The @create directive only returns an array of models')
+    if (returnType !== 'ListType') throw new Error('The @createMany directive only returns an array of models')
   }
 }
 
