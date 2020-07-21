@@ -12,7 +12,7 @@ class FindDirective extends BaseDirective {
       try {
         return res.toJSON();
       } catch {
-        return [];
+        return null;
       }
     };
   }
