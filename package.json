@@ -1,11 +1,12 @@
 {
   "name": "apollo-server-adonis-directives-pack",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "This package complements apollo-server-adonis with a set of directives",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "homepage": "https://docs.devyeti.space/",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Ettychel/apollo-server-adonis-directives-pack.git"

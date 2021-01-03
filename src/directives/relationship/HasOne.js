@@ -4,7 +4,7 @@ class HasOneDirective extends BaseDirective {
 
   visitFieldDefinition(field) {
     const loader = this._getLoader(this)
-    const localColomn = this._getLocalColomn()
+    const localColomn = this._getLocalColomn(this)
 
     field.resolve = async function (item) {
       return loader.load(item[localColomn])

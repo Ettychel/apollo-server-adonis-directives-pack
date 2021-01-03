@@ -28,9 +28,9 @@ class BaseDirective extends SchemaDirectiveVisitor {
     else return 'id'
   }
 
-  _getLocalColomn() {
+  _getLocalColomn(parentThis) {
     if (this.args.localColomn) return this.args.localColomn
-    else return 'id'
+    else return _.toLower(this._getNameModel(parentThis)) + 'id'
   }
 
   _getNameModel({ args: { model }, visitedType: { astNode: { type } } }) {
@@ -41,19 +41,19 @@ class BaseDirective extends SchemaDirectiveVisitor {
   }
 
   _getNameModelInAstNode(type) {
-    const prefix = 'App/Models/'
     if (type.kind === 'NonNullType' || type.kind === 'ListType')
       return this._getNameModelInAstNode(type.type)
     else if (type.kind === 'NamedType')
-      return prefix + type.name.value
+      return type.name.value
     else
       throw new Error('Oops!')
   }
 
   _getModel(parentThis) {
+    const prefix = 'App/Models/'
     const model = this._getNameModel(parentThis)
     try {
-      return use(model)
+      return use(prefix + model)
     } catch (e) {
       throw new GraphQLError(e)
     }
