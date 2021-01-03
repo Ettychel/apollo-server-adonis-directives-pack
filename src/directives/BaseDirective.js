@@ -23,14 +23,15 @@ class BaseDirective extends SchemaDirectiveVisitor {
   }
 
   _getOwnerColomn() {
-    const ownerColomn = this.args.ownerColomn
-    if (ownerColomn) return ownerColomn
+    if (this.args.ownerColomn) return this.args.ownerColomn
     else return 'id'
   }
 
-  _getLocalColomn(parentThis) {
+  _getLocalColomn() {
     if (this.args.localColomn) return this.args.localColomn
-    else return _.toLower(this._getNameModel(parentThis)) + 'id'
+    else if (this.name === 'belongsTo')
+      return _.toLower(this._getNameModel(this)) + '_id'
+    else return 'id'
   }
 
   _getNameModel({ args: { model }, visitedType: { astNode: { type } } }) {
@@ -42,13 +43,13 @@ class BaseDirective extends SchemaDirectiveVisitor {
 
   _getNameModelInAstNode(type) {
     if (type.kind === 'NonNullType' || type.kind === 'ListType')
-      return this._getNameModelInAstNode(type.type)
+    return this._getNameModelInAstNode(type.type)
     else if (type.kind === 'NamedType')
-      return type.name.value
+    return type.name.value
     else
-      throw new Error('Oops!')
+    throw new Error('Oops!')
   }
-
+  
   _getModel(parentThis) {
     const prefix = 'App/Models/'
     const model = this._getNameModel(parentThis)
