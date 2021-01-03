@@ -7,28 +7,28 @@ class BaseDirective extends SchemaDirectiveVisitor {
 
   _getLoader(parentThis) {
     const model = this._getModel(parentThis)
-    const colomn = this._getOwnerColomn(parentThis)
-    return this._createLoader(model, colomn)
+    const column = this._getOwnerColumn(parentThis)
+    return this._createLoader(model, column)
   }
 
-  _createLoader(Model, colomn) {
+  _createLoader(Model, column) {
     const batchLoadFn = (keys) => {
       return Model
         .query()
-        .whereIn(colomn, _.uniq(keys))
+        .whereIn(column, _.uniq(keys))
         .fetch()
-        .then(({ rows }) => this._sort(keys, rows, colomn))
+        .then(({ rows }) => this._sort(keys, rows, column))
     }
     return new DataLoader(batchLoadFn, { cache: false })
   }
 
-  _getOwnerColomn() {
-    if (this.args.ownerColomn) return this.args.ownerColomn
+  _getOwnerColumn() {
+    if (this.args.ownerColumn) return this.args.ownerColumn
     else return 'id'
   }
 
-  _getLocalColomn() {
-    if (this.args.localColomn) return this.args.localColomn
+  _getLocalColumn() {
+    if (this.args.localColumn) return this.args.localColumn
     else if (this.name === 'belongsTo')
       return _.toLower(this._getNameModel(this)) + '_id'
     else return 'id'
